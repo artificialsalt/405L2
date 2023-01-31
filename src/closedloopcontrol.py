@@ -15,7 +15,7 @@ class cl_loop:
     def set_setpoint(self, setpoint):
         self.setpoint = setpoint
 
-    def gain(self, gain):
+    def set_kp(self, gain):
         self.gain = gain
 
     def printout(self):
