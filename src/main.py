@@ -1,6 +1,7 @@
 import encoder_reader
 import motor_driver
 import closedloopcontrol
+import utime
 
 def main():
     M1 = motor_driver.MotorDriver('A10', 'B4', 'B5', 3, 1, 2)
@@ -8,12 +9,15 @@ def main():
     CL = closedloopcontrol.cl_loop(0.01, 10000)
     M1.enable_motor()
 
+
     while True:
         a = CL.run(E1.read())
+        if a < 15:
+            break
         M1.set_duty_cycle(a)
         utime.sleep_ms(10)
 
-
+    CL.printout()
 
 
 
