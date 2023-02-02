@@ -8,8 +8,12 @@ class cl_loop:
 
     def run(self, output):
         pwm = self.gain*(self.setpoint - output)
-        time = utime.ticks_ms()
-        self.print.append([time, output])
+        try:
+            time = utime.ticks_diff(prev_time , utime.ticks_ms())
+        except:
+            time = 0
+        prev_time = utime.ticks_ms()
+        #self.print.append([time, output])
         return pwm
 
     def set_setpoint(self, setpoint):
