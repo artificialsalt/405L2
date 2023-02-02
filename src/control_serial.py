@@ -8,29 +8,39 @@ This code should be run prior to running the MicroPython code.
 '''
 
 import serial 
-import array 
 from matplotlib import pyplot
 
-time_list = [] 
-data_list = []
-
 # Change test settings here
-gain = 100 # 0.05
+gain = 0.05
 
 # Open serial port and communicate motor position with board
-with serial.Serial('COM10', 115200) as s_port:
+with serial.Serial('COM10', 115200, timeout=5) as s_port:
     # Write motor gain to board
+    print(f'Commanding step response test with gain {gain}')
     s_port.write(bytes(str(gain), encoding = 'utf-8'))
 
+    print('Test in progress, waiting for data...')
     # Read motor position data
-    #print(s_port.readline ().split (b','))
+    raw_data = s_port.readlines()
+
     # Close port
-    print('Closing port...')
-'''
+    print('Data received, closing port...')
+
+list_of_vals = raw_data[0].decode('utf-8').split(',')
+
+time_list = []
+data_list = []
+
+# Separate time and position values
+for i in range(len(list_of_vals)):
+    if i % 2 == 0:
+        time_list.append(int(list_of_vals[i]))
+    else:
+        data_list.append(int(list_of_vals[i]))
+
 # Plot motor position
 pyplot.plot(time_list, data_list)
-pyplot.title(f'Motor step response with setpoint {ticks} and gain {gain}')
+pyplot.title(f'Motor step response with gain {gain}')
 pyplot.xlabel('Time [ms]')
 pyplot.ylabel('Encoder ticks')
 pyplot.show()
-'''
