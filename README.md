@@ -13,14 +13,14 @@ Run the MicroPython code (main.py) first, then run the PC code (code_serial.py).
 
 ## Example results
 
-(picture here)
+![Underdamped response](gain 0_01.png)
 
 Underdamped response
 
-(picture here)
+![Excessive oscillation](gain 0_5.png)
 
 Excessive oscillation
 
-(picture)
+![Good response](gain 0_02.png)
 
 Good response
