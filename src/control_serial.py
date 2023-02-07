@@ -1,7 +1,7 @@
 '''!
 @file control_serial.py
 This file contains code to communicate motor position data with the MicroPython board and plot the resulting data.
-This code should be run prior to running the MicroPython code.
+This code should be run AFTER running the MicroPython code.
 
 @author Richard Kwan, Jackie Chen, Chayton Ritter
 @date 31-Jan-2023
@@ -11,7 +11,7 @@ import serial
 from matplotlib import pyplot
 
 # Change test settings here
-gain = 0.05
+gain = 0.02
 
 # Open serial port and communicate motor position with board
 with serial.Serial('COM10', 115200, timeout=5) as s_port:
@@ -20,12 +20,14 @@ with serial.Serial('COM10', 115200, timeout=5) as s_port:
     s_port.write(bytes(str(gain), encoding = 'utf-8'))
 
     print('Test in progress, waiting for data...')
+    
     # Read motor position data
     raw_data = s_port.readlines()
 
     # Close port
     print('Data received, closing port...')
 
+# Create a list of values from the incoming string of data
 list_of_vals = raw_data[0].decode('utf-8').split(',')
 
 time_list = []

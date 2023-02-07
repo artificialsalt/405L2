@@ -1,3 +1,12 @@
+'''!
+@file main.py
+This file contains code that runs a step response test on a motor and transmits time and position data back via UART.
+This file should be run before running the PC code (control_serial.py).
+
+@author Richard Kwan, Jackie Chen, Chayton Ritter
+@date 31-Jan-2023
+'''
+
 import encoder_reader
 import motor_driver
 import closedloopcontrol
@@ -13,7 +22,6 @@ def main():
             break
 
     # Read the gain
-    #print('Data received')
     gain = u2.read()
     gain = float(gain.decode('utf-8'))
     
@@ -27,23 +35,25 @@ def main():
     start_time = utime.ticks_ms()
 
     while True:
+        # Adjust motor power 
         a = CL.run(E1.read())
         M1.set_duty_cycle(a)
         time_diff = utime.ticks_diff(utime.ticks_ms(), start_time)
-        #print(time_diff)
         
         # Terminate step response test after 3 seconds
         if time_diff > 3000:
             break
         utime.sleep_ms(10)
 
+    # Turn off motor
     M1.set_duty_cycle(0)
     M1.disable_motor()
+
+    # Get position data from controller class
     pos_data = CL.get_pos_data()
-    pos_data_as_str = [str(i) for i in pos_data]
-    tx_buf = ','.join(pos_data_as_str)
-    #print(tx_buf)
-    u2.write(tx_buf)
+    pos_data_as_str = [str(i) for i in pos_data]    # Turns every list item into a string
+    tx_buf = ','.join(pos_data_as_str)              # Turns the list into a really long string (a tx buffer)
+    u2.write(tx_buf)                                # Writes the really long string into UART
 
 if __name__ == '__main__':
     main()
