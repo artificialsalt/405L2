@@ -10,27 +10,26 @@ This repository also includes code intended for use on a computer that allows a 
 ## Usage
 
 1. Ensure the REPL on UART 2 is disabled in boot.py in the MicroPython flash.
-2. Modify the gain value in control_serial.py to the desired value. This line of code is on line 14 and looks like this:
+2. If necessary, modify the COM port number on line 17. By default, it is COM10.
+3. Modify the gain value in control_serial.py to the desired value. This line of code is on line 14 and looks like this:
 
   ```
   gain = 0.05
   ```
   
-  If necessary, modify the COM port number on line 17. By default, it is COM10.
-  
-3. Run main.py on the MicroPython board.
-4. Run control_serial.py on the PC.
+4. Run main.py on the MicroPython board.
+5. Run control_serial.py on the PC.
 
 ## Example results
 
 ![Underdamped response](gain_underdamped.png)
 
-Underdamped response
+An underdamped response. The motor never reaches the setpoint of 1000 ticks.
 
 ![Excessive oscillation](gain_excessive.png)
 
-Excessive oscillation
+An excessive oscillation. The motor never settles onto a final value.
 
 ![Good response](gain_good.png)
 
-Good response
+A good response. There is some small overshoot but the motor otherwise settles fairly quickly. The steady state error is due to low PWM percentages being unable to overcome the friction of the system.
